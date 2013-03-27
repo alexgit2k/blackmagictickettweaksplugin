@@ -149,18 +149,19 @@ class BlackMagicTicketTweaks(Component):
         #query page                                                            
         if template == "query.html":
             #remove ticket types user doesn't have permission to
-            newTypes = []
-            for option in data["fields"]["type"]["options"]:
-                #get perm for ticket type
-                ticketperm = self.config.get('blackmagic','ticket_type.%s' % option, None)
-                if not ticketperm:
-                    ticketperm = None
-                self.env.log.debug("Ticket permissions %s type %s " % (ticketperm,option) );
-                if ticketperm is None or ticketperm in req.perm:
-                    #user has perm, add to newTypes
-                    newTypes.append(option)
-                    self.env.log.debug("User %s has permission %s" % (req.authname, ticketperm) );
-            data["fields"]["type"]["options"]=newTypes
+            if "type" in data["fields"]:
+                newTypes = []
+                for option in data["fields"]["type"]["options"]:
+                    #get perm for ticket type
+                    ticketperm = self.config.get('blackmagic','ticket_type.%s' % option, None)
+                    if not ticketperm:
+                        ticketperm = None
+                    self.env.log.debug("Ticket permissions %s type %s " % (ticketperm,option) );
+                    if ticketperm is None or ticketperm in req.perm:
+                        #user has perm, add to newTypes
+                        newTypes.append(option)
+                        self.env.log.debug("User %s has permission %s" % (req.authname, ticketperm) );
+                data["fields"]["type"]["options"] = newTypes
             #remove ticket fields user doesn't have access to
             for i in range(len(data["tickets"])):
                 ticket = data["tickets"][i]
