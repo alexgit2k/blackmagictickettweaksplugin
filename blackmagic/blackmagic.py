@@ -302,7 +302,7 @@ class BlackMagicTicketTweaks(Component):
                 #change label
                 if e["label"] is not None:
                     stream |= Transformer('//th[@id="h_%s"]/text()' % field).replace(e["label"])
-                    stream = stream | Transformer('//label[@for="field-%s"]/text()' % field).replace(e["label"])
+                    stream = stream | Transformer('//label[@for="field-%s"]/text()' % field).replace(e["label"] + ":")
 
                 if disabled:
                     buffer = StreamBuffer()
