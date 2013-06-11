@@ -136,15 +136,18 @@ class BlackMagicTicketTweaks(Component):
                     data['fields'][i]['options'] = allowed_types
 
         if template == 'report_view.html':
-            data['numrows'] -= self.blockedTickets
-            # reset blocked tickets to 0
-            self.blockedTickets = 0
-            for row in data['row_groups']:
+            if 'numrows' in data:
+                data['numrows'] -= self.blockedTickets
+                # reset blocked tickets to 0
+                self.blockedTickets = 0
+            for row in data.get('row_groups', []):
                 for l in row:
                     if isinstance(l, list):
                         for t in l:
-                            tid = t['id']
-                            for cell_group in t['cell_groups']:
+                            tid = t.get('id') or t.get('ticket')
+                            if not tid:
+                                continue
+                            for cell_group in t.get('cell_groups', []):
                                 for field in cell_group:
                                     c = field['header']['col'].lower()
                                     if c in self.enchants:
