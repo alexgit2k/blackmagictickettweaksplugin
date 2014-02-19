@@ -39,14 +39,14 @@ class BlackMagicTicketTweaks(Component):
         see TracPermissions#CreatingNewPrivileges)""")
 
     enchants = dict()
-        
+
     # used to store extra permissions to prevent recursion when using
     # non-blackmagic permissions for ticket options
     extra_permissions = []
-    
+
     # stores the number of blocked tickets for matching the count on reports
     blockedTickets = 0
-    
+
     def __init__(self):
         tweaks = self.config.get('blackmagic', 'tweaks', '')
         self.env.log.debug("Tweaks %s " % tweaks)
@@ -67,7 +67,7 @@ class BlackMagicTicketTweaks(Component):
             self.enchants[e]['ondenial'] = \
                 self.config.get('blackmagic', '%s.ondenial' % e, 'disable')
         self.env.log.debug("Enchants %s " % self.enchants)
-    
+
     # IPermissionPolicy(Interface)
     def check_permission(self, action, username, resource, perm):
         # skip if permission is in ignore_permissions
@@ -109,7 +109,7 @@ class BlackMagicTicketTweaks(Component):
                 self.blockedTickets += 1
                 return False
         return None
-    
+
     ### IRequestFilter methods
 
     def pre_process_request(self, req, handler):
@@ -221,7 +221,7 @@ class BlackMagicTicketTweaks(Component):
             # fields
             for c, v in data['fields'].items():
                 if c in self.enchants:
-                    #re-label fields            
+                    #re-label fields
                     if self.enchants[c]['label'] is not None:
                         data['fields'][c]['label'] = self.enchants[c]['label']
 
@@ -267,7 +267,7 @@ class BlackMagicTicketTweaks(Component):
                 if new != original:
                     res.append(('%s' % e, 'Access denied to modifying %s' % e))
                     self.env.log.debug('Denied access to: %s' % e)
-        
+
         # check if user has perm to create ticket type
         ticket_type = 'ticket_type.%s' % ticket['type']
         ticket_perm = self.config.get('blackmagic', ticket_type, None)
