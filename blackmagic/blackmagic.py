@@ -38,16 +38,10 @@ class BlackMagicTicketTweaks(Component):
         `tracopt.perm.config_perm_provider.ExtraPermissionsProvider` component,
         see TracPermissions#CreatingNewPrivileges)""")
 
-    enchants = dict()
-
-    # used to store extra permissions to prevent recursion when using
-    # non-blackmagic permissions for ticket options
-    extra_permissions = []
-
-    # stores the number of blocked tickets for matching the count on reports
-    blockedTickets = 0
-
     def __init__(self):
+        self.enchants = dict()
+        self.extra_permissions = []
+        self.blockedTickets = 0
         tweaks = self.config.get('blackmagic', 'tweaks', '')
         self.env.log.debug("Tweaks %s " % tweaks)
         for e in (x.strip() for x in tweaks.split(',')):
@@ -97,7 +91,7 @@ class BlackMagicTicketTweaks(Component):
                 self.env.log.debug("Perm isn't set for ticket type %s"
                                    % ticket['type'])
                 return None
-            if not ticket_perm in self.permissions:
+            if ticket_perm not in self.permissions:
                 # perm not part of blackmagic perms, adding to extra perms to
                 # prevent recursion crash
                 self.extra_permissions.append(ticket_perm)

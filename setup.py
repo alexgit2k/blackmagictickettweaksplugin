@@ -14,7 +14,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='BlackMagicTicketTweaks',
-    version='0.12r1',
+    version='0.12.2',
     author='Stephen Hansen',
     maintainer='Rowan Wookey',
     maintainer_email='support@obsidianproject.co.uk',
