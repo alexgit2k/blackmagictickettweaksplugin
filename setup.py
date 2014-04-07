@@ -24,9 +24,7 @@ setup(
     url="http://trac-hacks.org/wiki/BlackMagicTicketTweaksPlugin",
     packages=find_packages(exclude=['*.tests*']),
     package_data={
-        'blackmagic': [
-            'htdocs/js/*.js', 'htdocs/css/*.css'
-        ]
+        'blackmagic': ['htdocs/js/*.js']
     },
     entry_points={
         'trac.plugins': [
