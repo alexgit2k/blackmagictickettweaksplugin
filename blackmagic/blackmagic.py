@@ -146,7 +146,6 @@ class BlackMagicTicketTweaks(Component):
                                     c = field['header']['col'].lower()
                                     if c in self.enchants:
                                         e = self.enchants[c]
-                                        print e
                                         # hide hidden fields
                                         if e['hide']:
                                             field['value'] = ''
