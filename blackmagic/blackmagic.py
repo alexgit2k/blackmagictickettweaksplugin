@@ -111,7 +111,7 @@ class BlackMagicTicketTweaks(Component):
 
     def post_process_request(self, req, template, data, content_type):
 
-        if template == 'ticket.html':
+        if template == 'ticket.html' or template.startswith('agilo_ticket_'):
             # remove ticket types user doesn't have permission to access
             for i, field in enumerate(data['fields']):
                 if field['name'] == 'type':
@@ -288,7 +288,7 @@ class BlackMagicTicketTweaks(Component):
             stream |= Transformer('//div[@class="query"]/h1'
                                   '/span[@class="numrows"]/text()').replace('')
 
-        if filename == 'ticket.html':
+        if filename == 'ticket.html' or filename.startswith('agilo_ticket_'):
             for field, e in self.enchants.items():
                 disabled = e['disable']
                 hidden = e['hide']
