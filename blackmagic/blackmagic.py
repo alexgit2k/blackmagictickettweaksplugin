@@ -15,7 +15,7 @@ from genshi.filters.transform import Transformer
 from genshi.filters.transform import StreamBuffer
 from trac.config import ListOption, Option
 from trac.core import Component, TracError, implements
-from trac.perm import IPermissionPolicy, IPermissionRequestor, IPermissionStore
+from trac.perm import IPermissionPolicy, IPermissionRequestor
 from trac.ticket import model
 from trac.ticket.model import Ticket
 from trac.ticket.api import ITicketManipulator
@@ -25,8 +25,7 @@ from trac.web.chrome import ITemplateProvider
 
 class BlackMagicTicketTweaks(Component):
     implements(ITemplateStreamFilter, ITemplateProvider, IPermissionRequestor,
-               ITicketManipulator, IPermissionPolicy, IRequestFilter,
-               IPermissionStore)
+               ITicketManipulator, IPermissionPolicy, IRequestFilter)
 
     gray_disabled = Option('blackmagic', 'gray_disabled', '', """
         If not set, disabled items will have a label with strike-through font.
@@ -62,7 +61,8 @@ class BlackMagicTicketTweaks(Component):
                 self.config.get('blackmagic', '%s.ondenial' % e, 'disable')
         self.env.log.debug("Enchants %s " % self.enchants)
 
-    # IPermissionPolicy(Interface)
+    # IPermissionPolicy methods
+
     def check_permission(self, action, username, resource, perm):
         # skip if permission is in ignore_permissions
         if action in self.permissions or action in self.extra_permissions:
@@ -104,7 +104,7 @@ class BlackMagicTicketTweaks(Component):
                 return False
         return None
 
-    ### IRequestFilter methods
+    # IRequestFilter methods
 
     def pre_process_request(self, req, handler):
         return handler
@@ -220,7 +220,7 @@ class BlackMagicTicketTweaks(Component):
 
         return template, data, content_type
 
-    ### ITicketManipulator methods
+    # ITicketManipulator methods
 
     def validate_ticket(self, req, ticket):
         """Validate a ticket after it's been populated from user input.
@@ -273,12 +273,12 @@ class BlackMagicTicketTweaks(Component):
                                 % ticket['type']))
         return res
 
-    ### IPermissionRequestor methods
+    # IPermissionRequestor methods
 
     def get_permission_actions(self):
         return (x.upper() for x in self.permissions)
 
-    ### ITemplateStreamFilter methods
+    # ITemplateStreamFilter methods
 
     def filter_stream(self, req, method, filename, stream, data):
         # remove matches from custom queries due to the fact ticket permissions
@@ -405,7 +405,7 @@ class BlackMagicTicketTweaks(Component):
 
         return stream
 
-    ### ITemplateProvider methods
+    # ITemplateProvider methods
 
     def get_htdocs_dirs(self):
         from pkg_resources import resource_filename
